@@ -7,15 +7,17 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RockPaperScissors {
 
 	public static void main(String[] args) throws IOException {
 
-		File inputDirectory = new File("C:/Users/leo/eclipse-workspace/rockpaperscissors/input/level1/");
-		String outputDirectory = "C:/Users/leo/eclipse-workspace/rockpaperscissors/output/level1/";
+		File inputDirectory = new File("C:/Users/leo/eclipse-workspace/rockpaperscissors/input/level2/");
+		String outputDirectory = "C:/Users/leo/eclipse-workspace/rockpaperscissors/output/level2/";
 
 		// File inputDirectory = new File("C:/Users/leo/Desktop/level1r/");
 		// String outputDirectory = "C:/Users/leo/Desktop/level1r/";
@@ -33,7 +35,7 @@ public class RockPaperScissors {
 
 							String[] fightingStylesArray = readInputFile(file.getPath());
 
-							writeOutputValue(outputDirectory + "output1_" + i + ".out", fightingStylesArray);
+							writeOutputValue(outputDirectory + "output2_" + i + ".out", fightingStylesArray);
 
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -51,49 +53,61 @@ public class RockPaperScissors {
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(path)), "UTF-8"));
 
-		int length = Integer.parseInt(reader.readLine()), i = 0;
+		String[] firstLine = reader.readLine().split(" ");
+		int numberOfTournaments = Integer.parseInt(firstLine[0]);
 
-		String[] fightingStylesArray = new String[length];
+		String[] fightingStylesArray = new String[numberOfTournaments];
 
-		while (reader.ready()) {
-			fightingStylesArray[i] = reader.readLine();
-			i++;
+		for (int i = 0; i < numberOfTournaments; i++) {
+
+			fightingStylesArray[i] = fightingStylesAfterTwoRounds(reader.readLine());
 		}
 
+		reader.close();
 		return fightingStylesArray;
 	}
 
-	private static char[] calculateWinner(String[] fightingStylesArray) {
+	private static String fightingStylesAfterTwoRounds(String line) {
 
-		int size = fightingStylesArray.length;
-		char[] fightingStyleArray = new char[size];
+		int length = line.length();
 
-		Map<String, Character> outcomes = new HashMap<>();
-		outcomes.put("PR", 'P');
-		outcomes.put("RP", 'P');
-		outcomes.put("PP", 'P');
-		outcomes.put("SR", 'R');
-		outcomes.put("RS", 'R');
-		outcomes.put("RR", 'R');
-		outcomes.put("SP", 'S');
-		outcomes.put("PS", 'S');
-		outcomes.put("SS", 'S');
+		// while (line.length() > 2) {
 
-		for (int i = 0; i < size; i++) {
-			String fightingStyles = fightingStylesArray[i];
+		for (int j = 0; j < 2; j++) {
 
-			fightingStyleArray[i] = outcomes.get(fightingStyles);
+			String pairs = "";
+			for (int i = 0; i < line.length(); i += 2) {
+				pairs += calculateWinner(line.substring(i, Math.min(length, i + 2)));
+			}
+			line = pairs;
+			// }
+
 		}
-		return fightingStyleArray;
+		return line;
+	}
+
+	private static String calculateWinner(String fightingStyles) {
+
+		Map<String, String> outcomes = new HashMap<>();
+		outcomes.put("PR", "P");
+		outcomes.put("RP", "P");
+		outcomes.put("PP", "P");
+		outcomes.put("SR", "R");
+		outcomes.put("RS", "R");
+		outcomes.put("RR", "R");
+		outcomes.put("SP", "S");
+		outcomes.put("PS", "S");
+		outcomes.put("SS", "S");
+
+		return outcomes.get(fightingStyles);
 	}
 
 	private static void writeOutputValue(String outputPath, String[] fightingStylesArray) throws IOException {
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath));
-		char[] fightingStyleArray = calculateWinner(fightingStylesArray);
 
-		for (char fightingStyle : fightingStyleArray) {
-			writer.write(fightingStyle);
+		for (String fightingStyles : fightingStylesArray) {
+			writer.write(fightingStyles);
 			writer.newLine();
 		}
 		writer.close();
