@@ -84,20 +84,35 @@ public class RockPaperScissors {
 		StringBuilder chain = new StringBuilder();
 
 		
-		while(rCount > 0) {
+	/*	while(rCount > 0) {
 			chain.append("R");
 			// Every R must be followed by a P to be eliminated.
-			if (pCount > 0 && pCount >= rCount) {
+			if (pCount > 0 && chain.toString().contains("RR")) {
 				chain.append("P");
 				pCount--;
-			} /*
+			}*/
+			
+			 /*
 				 * else if (sCount > 0) { chain.append("S"); sCount--; }
 		
 				 *
 				 */
 			
-			rCount--;
-		}
+			//rCount--;
+		//}
+		
+		
+		// Construire le motif "RRPR"
+	    while (rCount > 2 && pCount >= 1) {
+	        chain.append("RRPR");
+	        rCount -= 3;
+	        pCount -= 1;
+	    }
+
+	    // Optionnel : ajouter les R restants s'il y en a
+	    for (int i = 0; i < rCount; i++) {
+	        chain.append("R");
+	    }
 	//	if (rCount % pCount == 0) {
 		
 		/*	for (int i = 0; i < rCount; i++) {
