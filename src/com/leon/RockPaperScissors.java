@@ -7,8 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RockPaperScissors {
 
@@ -56,7 +54,7 @@ public class RockPaperScissors {
 		String[] fightingStylesArray = new String[numberOfTournaments];
 
 		for (int i = 0; i < numberOfTournaments; i++) {
-			
+
 			fightingStylesArray[i] = generateChain(reader.readLine());
 		}
 
@@ -83,24 +81,31 @@ public class RockPaperScissors {
 		// create initial path
 		StringBuilder chain = new StringBuilder();
 
-		// To ensure that there is no R in the second round,
-		// we must ensure that all R are against P and S.
+		// build the "RRPR" motif 
+		while (rCount > 2 && pCount >= 1) {
+			chain.append("RRPR");
+			rCount -= 3;
+			pCount -= 1;
+		}
+
+		// Optional: Add the remaining Rs if there are any.
 		for (int i = 0; i < rCount; i++) {
 			chain.append("R");
-			// Every R must be followed by a P to be eliminated.
 			if (pCount > 0) {
 				chain.append("P");
 				pCount--;
-			} else if (sCount > 0) {
-				chain.append("S");
-				sCount--;
 			}
 		}
 
 		// Add the rest of the P and S.
 		for (int i = 0; i < pCount; i++) {
 			chain.append("P");
+			if (sCount > 0) {
+				chain.append("S");
+				sCount--;
+			}
 		}
+		
 		for (int i = 0; i < sCount; i++) {
 			chain.append("S");
 		}
@@ -108,7 +113,6 @@ public class RockPaperScissors {
 		return chain.toString();
 	}
 
-	
 	private static void writeOutputValue(String outputPath, String[] fightingStylesArray) throws IOException {
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath));
