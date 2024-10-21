@@ -83,23 +83,50 @@ public class RockPaperScissors {
 		// create initial path
 		StringBuilder chain = new StringBuilder();
 
-		for (int i = 0; i < Math.round(rCount / 2); i++) {
+		
+		while(rCount > 0) {
 			chain.append("R");
+			// Every R must be followed by a P to be eliminated.
+			if (pCount > 0 && pCount >= rCount) {
+				chain.append("P");
+				pCount--;
+			} /*
+				 * else if (sCount > 0) { chain.append("S"); sCount--; }
+		
+				 *
+				 */
+			
 			rCount--;
 		}
+	//	if (rCount % pCount == 0) {
+		
+		/*	for (int i = 0; i < rCount; i++) {
+				chain.append("R");
+				// Every R must be followed by a P to be eliminated.
+				if (pCount > 0 && pCount >= rCount) {
+					chain.append("P");
+					pCount--;
+				}*/
+				 /*
+					 * else if (sCount > 0) { chain.append("S"); sCount--; }
+			
+					 *
+					 */
+				
+				//rCount--;
+			//}
+		//}
 		// To ensure that there is no R in the second round,
 		// we must ensure that all R are against P and S.
-		for (int i = 0; i < rCount; i++) {
+		/*for (int i = 0; i < rCount; i++) {
 			chain.append("R");
 			// Every R must be followed by a P to be eliminated.
 			if (pCount > 0) {
 				chain.append("P");
 				pCount--;
-			} /*
-				 * else if (sCount > 0) { chain.append("S"); sCount--; }
-				 */
+			} 
 
-		}
+		}*/
 
 		// Add the rest of the P and S.
 		for (int i = 0; i < pCount; i++) {
