@@ -7,8 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RockPaperScissors {
 
@@ -83,65 +81,21 @@ public class RockPaperScissors {
 		// create initial path
 		StringBuilder chain = new StringBuilder();
 
-		
-	/*	while(rCount > 0) {
-			chain.append("R");
-			// Every R must be followed by a P to be eliminated.
-			if (pCount > 0 && chain.toString().contains("RR")) {
-				chain.append("P");
-				pCount--;
-			}*/
-			
-			 /*
-				 * else if (sCount > 0) { chain.append("S"); sCount--; }
-		
-				 *
-				 */
-			
-			//rCount--;
-		//}
-		
-		
-		// Construire le motif "RRPR"
-	    while (rCount > 2 && pCount >= 1) {
-	        chain.append("RRPR");
-	        rCount -= 3;
-	        pCount -= 1;
-	    }
+		// build the "RRPR" motif 
+		while (rCount > 2 && pCount >= 1) {
+			chain.append("RRPR");
+			rCount -= 3;
+			pCount -= 1;
+		}
 
-	    // Optionnel : ajouter les R restants s'il y en a
-	    for (int i = 0; i < rCount; i++) {
-	        chain.append("R");
-	    }
-	//	if (rCount % pCount == 0) {
-		
-		/*	for (int i = 0; i < rCount; i++) {
-				chain.append("R");
-				// Every R must be followed by a P to be eliminated.
-				if (pCount > 0 && pCount >= rCount) {
-					chain.append("P");
-					pCount--;
-				}*/
-				 /*
-					 * else if (sCount > 0) { chain.append("S"); sCount--; }
-			
-					 *
-					 */
-				
-				//rCount--;
-			//}
-		//}
-		// To ensure that there is no R in the second round,
-		// we must ensure that all R are against P and S.
-		/*for (int i = 0; i < rCount; i++) {
+		// Optional: Add the remaining Rs if there are any.
+		for (int i = 0; i < rCount; i++) {
 			chain.append("R");
-			// Every R must be followed by a P to be eliminated.
 			if (pCount > 0) {
 				chain.append("P");
 				pCount--;
-			} 
-
-		}*/
+			}
+		}
 
 		// Add the rest of the P and S.
 		for (int i = 0; i < pCount; i++) {
@@ -151,6 +105,7 @@ public class RockPaperScissors {
 				sCount--;
 			}
 		}
+		
 		for (int i = 0; i < sCount; i++) {
 			chain.append("S");
 		}
