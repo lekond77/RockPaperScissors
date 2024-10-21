@@ -56,7 +56,7 @@ public class RockPaperScissors {
 		String[] fightingStylesArray = new String[numberOfTournaments];
 
 		for (int i = 0; i < numberOfTournaments; i++) {
-			
+
 			fightingStylesArray[i] = generateChain(reader.readLine());
 		}
 
@@ -83,6 +83,10 @@ public class RockPaperScissors {
 		// create initial path
 		StringBuilder chain = new StringBuilder();
 
+		for (int i = 0; i < Math.round(rCount / 2); i++) {
+			chain.append("R");
+			rCount--;
+		}
 		// To ensure that there is no R in the second round,
 		// we must ensure that all R are against P and S.
 		for (int i = 0; i < rCount; i++) {
@@ -91,15 +95,19 @@ public class RockPaperScissors {
 			if (pCount > 0) {
 				chain.append("P");
 				pCount--;
-			} else if (sCount > 0) {
-				chain.append("S");
-				sCount--;
-			}
+			} /*
+				 * else if (sCount > 0) { chain.append("S"); sCount--; }
+				 */
+
 		}
 
 		// Add the rest of the P and S.
 		for (int i = 0; i < pCount; i++) {
 			chain.append("P");
+			if (sCount > 0) {
+				chain.append("S");
+				sCount--;
+			}
 		}
 		for (int i = 0; i < sCount; i++) {
 			chain.append("S");
@@ -108,7 +116,6 @@ public class RockPaperScissors {
 		return chain.toString();
 	}
 
-	
 	private static void writeOutputValue(String outputPath, String[] fightingStylesArray) throws IOException {
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath));
