@@ -7,17 +7,15 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class RockPaperScissors {
 
 	public static void main(String[] args) throws IOException {
 
-		File inputDirectory = new File("C:/Users/leo/eclipse-workspace/rockpaperscissors/input/level2/");
-		String outputDirectory = "C:/Users/leo/eclipse-workspace/rockpaperscissors/output/level2/";
+		File inputDirectory = new File("C:/Users/leo/eclipse-workspace/rockpaperscissors/input/level3/");
+		String outputDirectory = "C:/Users/leo/eclipse-workspace/rockpaperscissors/output/level3/";
 
 		// File inputDirectory = new File("C:/Users/leo/Desktop/level1r/");
 		// String outputDirectory = "C:/Users/leo/Desktop/level1r/";
@@ -35,7 +33,7 @@ public class RockPaperScissors {
 
 							String[] fightingStylesArray = readInputFile(file.getPath());
 
-							writeOutputValue(outputDirectory + "output2_" + i + ".out", fightingStylesArray);
+							writeOutputValue(outputDirectory + "output3_" + i + ".out", fightingStylesArray);
 
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -55,53 +53,62 @@ public class RockPaperScissors {
 
 		String[] firstLine = reader.readLine().split(" ");
 		int numberOfTournaments = Integer.parseInt(firstLine[0]);
-
 		String[] fightingStylesArray = new String[numberOfTournaments];
 
 		for (int i = 0; i < numberOfTournaments; i++) {
-
-			fightingStylesArray[i] = fightingStylesAfterTwoRounds(reader.readLine());
+			
+			fightingStylesArray[i] = generateChain(reader.readLine());
 		}
 
 		reader.close();
 		return fightingStylesArray;
 	}
 
-	private static String fightingStylesAfterTwoRounds(String line) {
+	private static String generateChain(String input) {
+		int rCount = 0, pCount = 0, sCount = 0;
 
-		int length = line.length();
-
-		// while (line.length() > 2) {
-
-		for (int j = 0; j < 2; j++) {
-
-			String pairs = "";
-			for (int i = 0; i < line.length(); i += 2) {
-				pairs += calculateWinner(line.substring(i, Math.min(length, i + 2)));
+		String[] parts = input.split(" ");
+		for (String part : parts) {
+			int count = Integer.parseInt(part.substring(0, part.length() - 1));
+			char type = part.charAt(part.length() - 1);
+			if (type == 'R') {
+				rCount = count;
+			} else if (type == 'P') {
+				pCount = count;
+			} else if (type == 'S') {
+				sCount = count;
 			}
-			line = pairs;
-			// }
-
 		}
-		return line;
+
+		// create initial path
+		StringBuilder chain = new StringBuilder();
+
+		// To ensure that there is no R in the second round,
+		// we must ensure that all R are against P and S.
+		for (int i = 0; i < rCount; i++) {
+			chain.append("R");
+			// Every R must be followed by a P to be eliminated.
+			if (pCount > 0) {
+				chain.append("P");
+				pCount--;
+			} else if (sCount > 0) {
+				chain.append("S");
+				sCount--;
+			}
+		}
+
+		// Add the rest of the P and S.
+		for (int i = 0; i < pCount; i++) {
+			chain.append("P");
+		}
+		for (int i = 0; i < sCount; i++) {
+			chain.append("S");
+		}
+
+		return chain.toString();
 	}
 
-	private static String calculateWinner(String fightingStyles) {
-
-		Map<String, String> outcomes = new HashMap<>();
-		outcomes.put("PR", "P");
-		outcomes.put("RP", "P");
-		outcomes.put("PP", "P");
-		outcomes.put("SR", "R");
-		outcomes.put("RS", "R");
-		outcomes.put("RR", "R");
-		outcomes.put("SP", "S");
-		outcomes.put("PS", "S");
-		outcomes.put("SS", "S");
-
-		return outcomes.get(fightingStyles);
-	}
-
+	
 	private static void writeOutputValue(String outputPath, String[] fightingStylesArray) throws IOException {
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath));
